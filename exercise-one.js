@@ -32,7 +32,7 @@ function problemA () {
    *
    */
 
-  // callback version
+  //callback version
   readFile('poem-one/stanza-01.txt', function (err, stanza) {
     console.log('-- A. callback version --');
     green(stanza);
@@ -40,7 +40,9 @@ function problemA () {
 
   // promise version
   // ???
-
+  promisifiedReadFile('poem-one/stanza-01.txt').then(function(result) {
+    green(result);
+  });
 }
 
 function problemB () {
@@ -63,6 +65,12 @@ function problemB () {
 
   // promise version
   // ???
+  promisifiedReadFile('poem-one/stanza-02.txt').then(function(stanza2) {
+    green(stanza2);
+    return promisifiedReadFile('poem-one/stanza-03.txt');
+  }).then(function(stanza3) {
+    green(stanza3);
+  });
 
 }
 
@@ -76,18 +84,29 @@ function problemC () {
    */
 
   // callback version
-  readFile('poem-one/stanza-02.txt', function (err, stanza2) {
-    console.log('-- C. callback version (stanza two) --');
-    green(stanza2);
-    readFile('poem-one/stanza-03.txt', function (err, stanza3) {
-      console.log('-- C. callback version (stanza three) --');
-      green(stanza3);
-      console.log('-- C. callback version done --');
-    });
-  });
+  // readFile('poem-one/stanza-02.txt', function (err, stanza2) {
+  //   console.log('-- C. callback version (stanza two) --');
+  //   green(stanza2);
+  //   readFile('poem-one/stanza-03.txt', function (err, stanza3) {
+  //     console.log('-- C. callback version (stanza three) --');
+  //     green(stanza3);
+  //     console.log('-- C. callback version done --');
+  //   });
+  // });
 
   // promise version (hint: don't need to nest `then` calls)
   // ???
+  promisifiedReadFile('poem-one/stanza-02.txt')
+
+  .then(function(stanza2) {
+    green(stanza2);
+    return promisifiedReadFile('poem-one/stanza-03.txt');
+  })
+
+  .then(function(stanza3) {
+    green(stanza3);
+    console.log('done');
+  })
 
 }
 
@@ -99,14 +118,21 @@ function problemD () {
    */
 
   // callback version
-  readFile('poem-one/wrong-file-name.txt', function (err, stanza4) {
-    console.log('-- D. callback version (stanza four) --');
-    if (err) red(err);
-    else green(stanza4);
-  });
+  // readFile('poem-one/wrong-file-name.txt', function (err, stanza4) {
+  //   console.log('-- D. callback version (stanza four) --');
+  //   if (err) red(err);
+  //   else green(stanza4);
+  // });
 
   // promise version
   // ???
+
+  promisifiedReadFile('poem-one/wrong-file-name.txt')
+  .then(function(stanza) {
+    green(stanza);
+  }).catch(function errorHandler(err) {
+    red(err);
+  })
 
 }
 
@@ -119,19 +145,33 @@ function problemE () {
    */
 
   // callback version
-  readFile('poem-one/stanza-03.txt', function (err, stanza3) {
-    console.log('-- E. callback version (stanza three) --');
-    if (err) return red(err);
-    green(stanza3);
-    readFile('poem-one/wrong-file-name.txt', function (err2, stanza4) {
-      console.log('-- E. callback version (stanza four) --');
-      if (err2) return red(err2);
-      green(stanza4);
-    });
-  });
+  // readFile('poem-one/stanza-03.txt', function (err, stanza3) {
+  //   console.log('-- E. callback version (stanza three) --');
+  //   if (err) return red(err);
+  //   green(stanza3);
+  //   readFile('poem-one/wrong-file-name.txt', function (err2, stanza4) {
+  //     console.log('-- E. callback version (stanza four) --');
+  //     if (err2) return red(err2);
+  //     green(stanza4);
+  //   });
+  // });
 
   // promise version
-  // ???
+
+  promisifiedReadFile('poem-one/stanza-03.txt')
+
+  .then(function(stanza3) {
+    green(stanza3);
+    return promisifiedReadFile('poem-one/wrong-file-name.txt');
+  })
+
+  .then(function(stanza4) {
+    green(stanza4);
+  })
+
+  .catch(function(err) {
+    red(err);
+  });
 
 }
 
@@ -145,23 +185,35 @@ function problemF () {
    */
 
   // callback version
-  readFile('poem-one/stanza-03.txt', function (err, stanza3) {
-    console.log('-- F. callback version (stanza three) --');
-    if (err) {
-      red(err);
-      console.log('-- F. callback version done --');
-      return;
-    }
-    green(stanza3);
-    readFile('poem-one/wrong-file-name.txt', function (err2, stanza4) {
-      console.log('-- F. callback version (stanza four) --');
-      if (err2) red(err2);
-      else green(stanza4);
-      console.log('-- F. callback version done --');
-    });
-  });
+  // readFile('poem-one/stanza-03.txt', function (err, stanza3) {
+  //   console.log('-- F. callback version (stanza three) --');
+  //   if (err) {
+  //     red(err);
+  //     console.log('-- F. callback version done --');
+  //     return;
+  //   }
+  //   green(stanza3);
+  //   readFile('poem-one/wrong-file-name.txt', function (err2, stanza4) {
+  //     console.log('-- F. callback version (stanza four) --');
+  //     if (err2) red(err2);
+  //     else green(stanza4);
+  //     console.log('-- F. callback version done --');
+  //   });
+  // });
 
   // promise version
   // ???
+
+  promisifiedReadFile('poem-one/stanza-03.txt')
+  .then(function(stanza3) {
+    green(stanza3);
+    return promisifiedReadFile('poem-one/wrong-file-name.txt');
+  }).then(function(stanza4) {
+    green(stanza4);
+    console.log('done');
+  }).catch(function(err) {
+    red(err);
+    console.log('done');
+  });
 
 }
